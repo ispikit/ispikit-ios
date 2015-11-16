@@ -5,19 +5,17 @@ Version 2.0
 
 This package contains the Ispikit Library, or ISTAnalyzer for iOS (ARM and Intel) devices. It also includes a simple iOS application (named SampleApp) that illustrates the use of the library. The library is intended to record audio from a user, recognize it, score the pronunciation, the speech tempo, and detect mispronounced words. It has an Objective-C API, and it can be easily integrated into an existing application, as shown in the sample project. This repository contains:
 
-This version is free to use and includes two limitations compared to the full version:
-
-* Number of sentences for recognition is limited to 3
-* Number of words per sentence is limited to 4
-
-Contact us at info@ispikit.com for the full version.
-
 * `ISTAnalyzer`: Ispikit Library, including header file, static libraries and resource files
 * `SampleApp`: sample application
 * `README.md`: This file
 * `LICENSE`
 
-This file aims at documenting the library's use and goals.
+This version is free to use and includes two limitations compared to the full version:
+
+    Number of sentences for recognition is limited to 3
+    Number of words per sentence is limited to 4
+
+Contact us at info@ispikit.com for the full version.
 
 Content:
 
@@ -37,8 +35,8 @@ Content:
 * Make sure you have a valid headset configured.
 * Launch compilation and app.
 * Once the app is up, you must first initialize the library (press the "Initialize" button). The field "Init" changes to "Yes" once completed.
-* Enter a sentence in the text field.
-* Press the "Start" and read the sentence.
+* Enter sentences in the text field (separated with commas, no punctuation inside sentences).
+* Press the "Start" and read one of the sentences.
 * While you read, you will see the recognized words as they are reported by the library (in the format x-y-z-k, explained in section 4. of this document).
 * Press "Stop" to stop.
 * Analysis is starting, you can see the completion status in the "Completion" field.
@@ -50,7 +48,7 @@ Content:
 
 # 2. What the Ispikit Library does
 
-The library records a user's audio input and computes a pronunciation score based on the words that the user was expected to say. The score is a number between 0 and 100, 100 being the ideal score of a native-like pronunciation. It also gives the reading speed, the speech tempo, that can be used to measure the reader's fluency. It is measured by "number of spoken phonemes in 10 seconds", and in practice should be more than 80 for a fluent reader.
+The library records a user's audio input, recognizes it among the provided sentences, and computes a pronunciation score based on the words that the user was expected to say. The score is a number between 0 and 100, 100 being the ideal score of a native-like pronunciation. It also gives the reading speed, the speech tempo, that can be used to measure the reader's fluency. It is measured by "number of spoken phonemes in 10 seconds", and in practice should be more than 80 for a fluent reader.
 
 Expected sentences can be of any length, using any word that exists in the pronunciation dictionary. The library ships with a pronunciation dictionary which is fairly large and should contain most words used in language learning context. However, it can be expanded to add new words, either by editing the packaged dictionary, or at runtime (See Appendix).
 
@@ -124,7 +122,7 @@ Most calls do not take arguments and return a boolean. YES means that the call w
   Starts initialization of the Analyzer. This should not be confused with the proper alloc-init of the object, it must be called on a valid object, created with  [ISTAnalyzer new] or [[ISTAnalyzer alloc] init]. This call is asynchronous and calls back executing the initDoneCallback block. Typically, it takes a few seconds. Returns NO if already initialized.
 * `(BOOL) startRecording;`
 
-  Starts recording. It uses the sentence property as bases for recognition and analysis, so the sentence property should have been set before that call. During recording, the newWordsCallback block is executed each time a new word was recognized. Recording continues until stopRecording or stopRecordingWithForce is called. 
+  Starts recording. It uses the `sentences` property as basis for recognition and analysis, so the `sentences` property should have been set before that call. During recording, the newWordsCallback block is executed each time a new word was recognized. Recording continues until stopRecording or stopRecordingWithForce is called. 
 
   It returns NO if the object was not Initialized, or the sentence is invalid or it is not ready to record, for instance during audio playback.
 
@@ -152,9 +150,9 @@ Most calls do not take arguments and return a boolean. YES means that the call w
 
 The ISTAnalyzer object exposes a few read-write properties.
 
-    @property NSString *sentence;
+    @property NSString *sentences;
 
-This should be set to the expected sentence to be read before starting recording. The sentence must include only words that are present in the dictionary. See Appendix for details.
+This should be set to the expected sentences to be read before starting recording. The sentences must include only words that are present in the dictionary. See Appendix for details.
 
     @property (copy) InitDoneCallback initDoneCallback;
     @property (copy) ResultCallback resultCallback;
